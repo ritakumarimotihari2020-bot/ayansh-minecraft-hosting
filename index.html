@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Ayansh Hosting — Minecraft Panel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">A</span><span>AYANSH <small>HOSTING</small></span></div>
+    <nav>
+      <a class="active" href="#overview">▦ Overview</a>
+      <a href="#console">⌘ Console</a>
+      <a href="#software">◇ Software</a>
+      <a href="#files">▤ Files</a>
+      <a href="#players">♙ Players</a>
+    </nav>
+    <div class="side-note">MINECRAFT CONTROL PANEL<br><span>Frontend preview</span></div>
+  </aside>
+  <main class="main" id="overview">
+    <header><div><p class="eyebrow">SERVER MANAGEMENT</p><h1>Dashboard</h1></div><div class="profile">A</div></header>
+    <section class="welcome"><div><p class="eyebrow">WELCOME BACK</p><h2>Your server, your world.</h2><p>Manage your Minecraft server from one place.</p></div><div class="cube">⬡</div></section>
+    <section class="server-card">
+      <div class="server-top"><div class="server-icon">⛏</div><div class="server-name"><h2>Survival SMP</h2><p><span class="dot" id="statusDot"></span><span id="statusText">Offline</span> · Java Edition</p></div><span class="demo-tag">DEMO</span></div>
+      <div class="server-ip"><div><small>SERVER ADDRESS</small><strong id="serverAddress">your-server.example:25565</strong></div><button class="secondary" id="copyIp">Copy IP</button></div>
+      <div class="server-actions"><button class="start" id="startBtn">▶ Start</button><button class="secondary" id="stopBtn">■ Stop</button><button class="secondary" id="restartBtn">↻ Restart</button></div>
+      <p class="notice">Demo controls only — connect a secure server backend to control a real Minecraft server.</p>
+    </section>
+    <section class="stats">
+      <article class="stat"><small>MEMORY</small><strong>0 <span>/ 2 GB</span></strong><div class="bar"><i style="width:2%"></i></div></article>
+      <article class="stat"><small>PLAYERS</small><strong>0 <span>/ 20</span></strong><p>No players online</p></article>
+      <article class="stat"><small>SOFTWARE</small><strong>Paper</strong><p>Version 1.21.x · Preview</p></article>
+    </section>
+    <section class="lower">
+      <article class="panel" id="console"><div class="panel-head"><h3>Console</h3><span>LIVE PREVIEW</span></div><div class="terminal" id="terminal"><p class="muted">[Panel] Welcome to Ayansh Hosting.</p><p class="muted">[Panel] This is a frontend demo. No server is connected.</p></div><div class="command"><input id="commandInput" placeholder="Console is disabled in demo" disabled><button disabled>Send</button></div></article>
+      <article class="panel" id="software"><div class="panel-head"><h3>Quick settings</h3></div><div class="setting"><span>Server software</span><b>Paper</b></div><div class="setting"><span>Minecraft version</span><b>1.21.x</b></div><div class="setting" id="files"><span>File manager</span><b>Backend required</b></div><div class="setting" id="players"><span>Player management</span><b>Backend required</b></div></article>
+    </section>
+    <footer>© 2026 Ayansh Hosting · Built for your Minecraft community</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
