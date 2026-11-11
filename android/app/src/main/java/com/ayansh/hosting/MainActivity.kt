@@ -3,33 +3,65 @@ package com.ayansh.hosting
 import android.app.Activity
 import android.os.Bundle
 import android.graphics.Color
-import android.view.Gravity
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainActivity : Activity() {
+    private lateinit var apiUrl: EditText
+    private lateinit var token: EditText
+    private lateinit var status: TextView
+    private lateinit var output: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER
-            setPadding(28, 32, 28, 32)
+            setPadding(28, 36, 28, 24)
             setBackgroundColor(Color.rgb(10, 17, 29))
         }
-        fun label(text: String, size: Float, color: Int, bold: Boolean = false) =
-            TextView(this).apply {
-                this.text = text
-                textSize = size
-                setTextColor(color)
-                if (bold) setTypeface(null, android.graphics.Typeface.BOLD)
-                gravity = Gravity.CENTER
-                setPadding(8, 12, 8, 12)
+        fun label(value: String, size: Float, color: Int = Color.WHITE) =
+            TextView(this).apply { text=value; textSize=size; setTextColor(color); setPadding(0,12,0,12) }
+        root.addView(label("AYANSH HOSTING", 26f))
+        root.addView(label("Minecraft Cloud Control", 15f, Color.LTGRAY))
+        apiUrl = EditText(this).apply { hint="Cloud API URL (https://...workers.dev)"; setSingleLine(true); setTextColor(Color.WHITE); setHintTextColor(Color.GRAY) }
+        token = EditText(this).apply { hint="Panel API token"; setSingleLine(true); inputType=android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD; setTextColor(Color.WHITE); setHintTextColor(Color.GRAY) }
+        root.addView(apiUrl); root.addView(token)
+        status = label("Status: NOT CONNECTED", 18f, Color.rgb(255,190,70))
+        root.addView(status)
+        root.addView(Button(this).apply { text="CHECK SERVER STATUS"; setOnClickListener { checkStatus() } })
+        output = label("Enter your HTTPS Worker URL and API token. A disconnected server is never shown as online.", 14f, Color.LTGRAY)
+        root.addView(output)
+        setContentView(ScrollView(this).apply { addView(root) })
+    }
+
+    private fun checkStatus() {
+        val base = apiUrl.text.toString().trim().trimEnd('/')
+        val secret = token.text.toString().trim()
+        if (!base.startsWith("https://") || secret.isEmpty()) {
+            status.text = "Status: CONFIGURATION REQUIRED"
+            output.text = "Enter your HTTPS Cloudflare Worker URL and PANEL_API_TOKEN."
+            return
+        }
+        status.text = "Status: CHECKING..."
+        Thread {
+            try {
+                val connection = (URL("$base/api/status").openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 8000
+                    readTimeout = 8000
+                    setRequestProperty("Authorization", "Bearer $secret")
+                }
+                val code = connection.responseCode
+                val body = (if (code in 200..299) connection.inputStream else connection.errorStream).bufferedReader().use { it.readText() }
+                runOnUiThread {
+                    status.text = if (code == 200) "Status: API CONNECTED" else "Status: API ERROR ($code)"
+                    output.text = body
+                }
+                connection.disconnect()
+            } catch (e: Exception) {
+                runOnUiThread { status.text="Status: CONNECTION FAILED"; output.text=e.message ?: "Network error" }
             }
-        root.addView(label("AYANSH HOSTING", 25f, Color.WHITE, true))
-        root.addView(label("Your Minecraft cloud control panel", 14f, Color.LTGRAY))
-        root.addView(label("SERVER: NOT CONNECTED", 18f, Color.rgb(255,190,70), true))
-        root.addView(label("Cloud API and Android app scaffold is ready.\nA real Minecraft host agent and compute server are still required before Start / Stop / Console can work.", 14f, Color.LTGRAY))
-        root.addView(label("Next: connect a secure host agent", 15f, Color.rgb(90,220,160), true))
-        setContentView(root)
+        }.start()
     }
 }
