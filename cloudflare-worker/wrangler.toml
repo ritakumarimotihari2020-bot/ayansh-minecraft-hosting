@@ -1,0 +1,4 @@
+name = "ayansh-minecraft-hosting-api"
+main = "src/index.js"
+compatibility_date = "2026-11-11"
+workers_dev = true
