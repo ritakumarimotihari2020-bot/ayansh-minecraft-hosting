@@ -1,15 +1,19 @@
-# Ayansh Minecraft Hosting Panel
+# Ayansh Minecraft Hosting
 
-A responsive, dark-themed frontend dashboard preview for managing a Minecraft server.
+A Minecraft hosting control-panel project with a static web dashboard, an Android app source project, and a Cloudflare Worker API scaffold.
 
-## Deploy with GitHub Pages
+## Project folders
+- `android/` — native Android app source (early scaffold; APK not built yet).
+- `cloudflare-worker/` — API control-plane scaffold for Cloudflare Workers.
+- `index.html`, `styles.css`, `app.js` — GitHub Pages web dashboard.
 
-1. Open **Settings → Pages** in this repository.
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-3. Push the workflow in `.github/workflows/pages.yml`.
-4. Open **Actions** and wait for the Pages workflow to finish successfully.
-5. Visit: https://ritakumarimotihari2020-bot.github.io/ayansh-minecraft-hosting/
+## Free-tier architecture
+GitHub Pages can host the web dashboard, and Cloudflare Workers can host lightweight API endpoints on its free tier, subject to current plan limits. Neither platform runs a persistent Minecraft Java server process. A separate compute host (and a secure host agent installed there) is required for real server Start/Stop, console, player and file operations. A permanently free always-on Minecraft compute host is not guaranteed.
 
-## Important
+## Next steps
+1. Deploy `cloudflare-worker/` as a Cloudflare Worker.
+2. Set the secret `PANEL_API_TOKEN` in Worker settings. Never commit the token.
+3. Build and install the Android project using Android Studio or Gradle.
+4. Provision a suitable Minecraft compute host and connect a secure host agent before enabling real controls.
 
-This repository provides a **frontend demo only**. Start, stop, and restart buttons change the preview UI; they do not control a real Minecraft server. GitHub Pages cannot run a Minecraft server process. Real server management requires a separate backend/agent on a host machine, authenticated API endpoints, and secure access controls. Never expose server credentials or API tokens in frontend JavaScript.
+Until a host agent is connected, the API deliberately reports `NOT_CONNECTED` and refuses control actions rather than pretending they worked.
