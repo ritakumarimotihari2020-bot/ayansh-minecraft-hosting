@@ -16,6 +16,7 @@
       <a href="#software">◇ Software</a>
       <a href="#files">▤ Files</a>
       <a href="#players">♙ Players</a>
+      <a href="#settings">⚙ Settings</a>
     </nav>
     <div class="side-note">MINECRAFT CONTROL PANEL<br><span>Frontend preview</span></div>
   </aside>
@@ -36,6 +37,18 @@
     <section class="lower">
       <article class="panel" id="console"><div class="panel-head"><h3>Console</h3><span>LIVE PREVIEW</span></div><div class="terminal" id="terminal"><p class="muted">[Panel] Welcome to Ayansh Hosting.</p><p class="muted">[Panel] This is a frontend demo. No server is connected.</p></div><div class="command"><input id="commandInput" placeholder="Console is disabled in demo" disabled><button disabled>Send</button></div></article>
       <article class="panel" id="software"><div class="panel-head"><h3>Quick settings</h3></div><div class="setting"><span>Server software</span><b>Paper</b></div><div class="setting"><span>Minecraft version</span><b>1.21.x</b></div><div class="setting" id="files"><span>File manager</span><b>Backend required</b></div><div class="setting" id="players"><span>Player management</span><b>Backend required</b></div></article>
+    </section>
+    <section class="panel settings-panel" id="settings">
+      <div class="panel-head"><h3>Server settings</h3><span>LOCAL DEMO</span></div>
+      <p class="settings-help">Edit preview settings. These values are saved only in this browser and do not change a real server.</p>
+      <form id="settingsForm" class="settings-form">
+        <label>Server name<input id="settingName" maxlength="32" value="Survival SMP" required></label>
+        <label>Server software<select id="settingSoftware"><option>Paper</option><option>Vanilla</option><option>Purpur</option><option>Fabric</option><option>Forge</option></select></label>
+        <label>Minecraft version<select id="settingVersion"><option>1.21.4</option><option>1.21.1</option><option>1.20.4</option><option>1.20.1</option></select></label>
+        <label>Max players<input id="settingPlayers" type="number" min="1" max="100" value="20" required></label>
+        <label class="wide">Server MOTD<input id="settingMotd" maxlength="100" value="Welcome to my Minecraft server!"></label>
+        <div class="settings-submit"><button class="start" type="submit">Save preview settings</button><span id="settingsMessage" role="status"></span></div>
+      </form>
     </section>
     <footer>© 2026 Ayansh Hosting · Built for your Minecraft community</footer>
   </main>
