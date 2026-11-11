@@ -1,12 +1,26 @@
-# Ayansh Minecraft Hosting API
+# Ayansh Hosting API (Cloudflare Worker)
 
-This is the control-plane API scaffold for the Android app.
+## Deploy using Cloudflare dashboard
+1. Create or sign in to a Cloudflare account.
+2. Open Workers & Pages and create a Worker named `ayansh-minecraft-hosting-api`.
+3. Paste the contents of `src/index.js` into the Worker editor and deploy.
+4. In Worker Settings → Variables and Secrets, add secret `PANEL_API_TOKEN` with a long random value. Never commit this token to GitHub.
+5. Visit `https://YOUR-WORKER.workers.dev/health`; it should return OK JSON.
+6. Call `/api/status` with header `Authorization: Bearer YOUR_TOKEN`.
 
-## Free deployment
-1. Create a Cloudflare account and a Worker named `ayansh-minecraft-hosting-api`.
-2. Deploy this folder with Wrangler (or paste `src/index.js` into the Worker editor).
-3. Add a Worker secret named `PANEL_API_TOKEN`; never commit the token.
-4. Test `GET /health`.
+## Deploy with Wrangler
+```sh
+npm install -g wrangler
+wrangler login
+cd cloudflare-worker
+wrangler secret put PANEL_API_TOKEN
+wrangler deploy
+```
 
-## Current limitation
-The Worker can host the API on a free tier, but **cannot run a Minecraft Java server process**. A separate always-on compute host and a trusted host agent are required for real Start/Stop/Console/Players. No fake success responses are returned; control endpoints stay disabled until that agent exists.
+## Current endpoints
+- `GET /health` — public health check.
+- `GET /api/status` — authenticated; currently returns `NOT_CONNECTED`.
+- `GET /api/servers` — authenticated; currently returns an empty list.
+- `POST /api/server/*` — intentionally refuses actions with HTTP 409 until a trusted host agent exists.
+
+This Worker is a lightweight control-plane API, not a Minecraft game server. GitHub Pages and Workers do not provide a persistent Minecraft Java process. A trusted compute host and authenticated agent are required for real Start/Stop/console/file actions. Never expose RCON, Docker socket, or an agent port publicly.
